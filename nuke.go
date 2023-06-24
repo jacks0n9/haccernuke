@@ -5,7 +5,6 @@ import (
 	"sync"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kr/pretty"
 )
 
 func (na NukeAccount) BeginNuke() error {
@@ -66,7 +65,6 @@ func (na NukeAccount) startNukeTasks() {
 			Enabled:  len(fc.AutoAdmin) > 0,
 		},
 	}
-	logger.Infoln(pretty.Sprint(tasks))
 	wg := sync.WaitGroup{}
 	for _, feature := range tasks {
 		if feature.Enabled {
