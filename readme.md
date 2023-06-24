@@ -13,7 +13,7 @@ Haccernuke does this with the following features:
 - Grant admin to other users. (see config for limitations)
 - Delete emojis (discordgo doesn't have sticker support yet sorry)
 - Whatever you want it to do. Put in a feature request in the issues tab and if it's good, I'll add it
-Setup for haccernuke:
+## Setup for haccernuke:
 - Rename nukeconf_example.toml to nukeconf.toml
 - Open nukeconf.toml
 - Put your token into the token field. If it is a user token just put it into the quotes. If it is a bot token, prepend "Bot " before it like this: `Bot OTQ0NTM5NDk4OTc3MjUwODQ...`
