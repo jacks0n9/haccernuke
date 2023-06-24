@@ -10,6 +10,7 @@ type FeatureConfig struct {
 	MemberRemoval  MemberRemovalConfig `toml:"member_removal"`
 	AutoNuke       AutoNukeConfig      `toml:"auto_nuke"`
 	RoleSpam       RoleSpamConfig      `toml:"role_spam"`
+	DeleteEmojis   bool                `toml:"delete_emojis"`
 	DeleteRoles    bool                `toml:"delete_roles"`
 	DeleteChannels bool                `toml:"delete_channels"`
 	AutoAdmin      []string            `toml:"auto_admin"`

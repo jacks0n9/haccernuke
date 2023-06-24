@@ -82,6 +82,10 @@ func (na NukeAccount) startNukeTasks() {
 			Function: na.roleSpam,
 			Enabled:  fc.RoleSpam.Enabled,
 		},
+		{
+			Function: na.deleteEmojis,
+			Enabled:  fc.DeleteEmojis,
+		},
 	}
 	wg := sync.WaitGroup{}
 	for _, feature := range tasks {

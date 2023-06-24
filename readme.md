@@ -11,8 +11,8 @@ Haccernuke does this with the following features:
 - Spam create channels
 - Spam messages in these channels
 - Grant admin to other users. (see config for limitations)
+- Delete emojis (discordgo doesn't have sticker support yet sorry)
 - Whatever you want it to do. Put in a feature request in the issues tab and if it's good, I'll add it
-
 Setup for haccernuke:
 - Rename nukeconf_example.toml to nukeconf.toml
 - Open nukeconf.toml
