@@ -8,9 +8,9 @@ type NukeConfig struct {
 type FeatureConfig struct {
 	AfterChannelConfig  AfterChannelConfig  `toml:"after_channels"`
 	MemberRemovalConfig MemberRemovalConfig `toml:"member_removal"`
+	AutoNukeConfig      AutoNukeConfig      `toml:"auto_nuke"`
 	DeleteRoles         bool                `toml:"delete_roles"`
 	DeleteChannels      bool                `toml:"delete_channels"`
-	AutoNuke            bool                `toml:"auto_nuke"`
 	AutoAdmin           []string            `toml:"auto_admin"`
 }
 type MemberRemovalConfig struct {
@@ -24,4 +24,10 @@ type AfterChannelConfig struct {
 	MessageRepetitions int    `toml:"message_repetitions"`
 	ChannelAmount      int    `toml:"channel_amount"`
 	ChannelName        string `toml:"channel_name"`
+}
+
+type AutoNukeConfig struct {
+	Enabled      bool     `toml:"enabled"`
+	TargetOnly   []string `toml:"target_only"`
+	ExemptGuilds []string `toml:"exempt_guilds"`
 }

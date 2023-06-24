@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
 
 	"github.com/BurntSushi/toml"
@@ -18,19 +17,6 @@ type NukeAccount struct {
 
 var logger = logrus.New()
 
-func (na NukeAccount) getGuildMemberIDs() []string {
-	ids := []string{}
-	collected := make(chan bool)
-	na.Session.AddHandlerOnce(func(s *discordgo.Session, chunk *discordgo.GuildMembersChunk) {
-		for _, member := range chunk.Members {
-			ids = append(ids, member.User.ID)
-		}
-		collected <- true
-	})
-	na.Session.RequestGuildMembers(na.Config.GuildID, "", 0, fmt.Sprint(rand.Intn(10000000)), false)
-	<-collected
-	return ids
-}
 func main() {
 	nukeAccount := NukeAccount{}
 	contents, err := os.ReadFile("nukeconf.toml")
@@ -42,7 +28,7 @@ func main() {
 	session, _ := discordgo.New(nukeAccount.Config.Token)
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged | discordgo.IntentGuildMembers
 	nukeAccount.Session = session
-	if !nukeAccount.Config.FeatureConfig.AutoNuke {
+	if !nukeAccount.Config.FeatureConfig.AutoNukeConfig.Enabled {
 		fmt.Println("Initialized with auto nuke off. Proceed with nuke (press enter)?")
 		fmt.Scanln()
 	}
