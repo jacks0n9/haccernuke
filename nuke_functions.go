@@ -1,7 +1,9 @@
 package main
 
 import (
+	"math/rand"
 	"sync"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"golang.org/x/exp/slices"
@@ -9,16 +11,16 @@ import (
 
 func (na NukeAccount) makeChannels() error {
 	wg := sync.WaitGroup{}
-	for i := 0; i < na.Config.FeatureConfig.AfterChannelConfig.ChannelAmount; i++ {
+	for i := 0; i < na.Config.FeatureConfig.AfterChannel.ChannelAmount; i++ {
 		wg.Add(1)
 		go func() {
 			logger.Println("Channel created")
-			channel, err := na.Session.GuildChannelCreate(na.Config.GuildID, na.Config.FeatureConfig.AfterChannelConfig.ChannelName, discordgo.ChannelTypeGuildText)
+			channel, err := na.Session.GuildChannelCreate(na.Config.GuildID, na.Config.FeatureConfig.AfterChannel.ChannelName, discordgo.ChannelTypeGuildText)
 			if err != nil {
 				logger.Errorf("Error creating channel: %s", err)
 			}
-			for i := 0; i < na.Config.FeatureConfig.AfterChannelConfig.MessageRepetitions; i++ {
-				na.Session.ChannelMessageSend(channel.ID, na.Config.FeatureConfig.AfterChannelConfig.Message)
+			for i := 0; i < na.Config.FeatureConfig.AfterChannel.MessageRepetitions; i++ {
+				na.Session.ChannelMessageSend(channel.ID, na.Config.FeatureConfig.AfterChannel.Message)
 			}
 			wg.Done()
 		}()
@@ -35,7 +37,7 @@ func (na NukeAccount) deleteChannels() error {
 		return err
 	}
 	for _, channel := range channels {
-		if channel.Name == na.Config.FeatureConfig.AfterChannelConfig.ChannelName {
+		if channel.Name == na.Config.FeatureConfig.AfterChannel.ChannelName {
 			continue
 		}
 		wg.Add(1)
@@ -92,7 +94,7 @@ func (na NukeAccount) autoAdmin() error {
 }
 func (na NukeAccount) removeMembers() error {
 	wg := sync.WaitGroup{}
-	exemptUsersTotal := append(na.Config.FeatureConfig.AutoAdmin, na.Config.FeatureConfig.MemberRemovalConfig.Exempt...)
+	exemptUsersTotal := append(na.Config.FeatureConfig.AutoAdmin, na.Config.FeatureConfig.MemberRemoval.Exempt...)
 	exemptUsersTotal = removeDuplicate(exemptUsersTotal)
 	memberIDs := na.getGuildMemberIDs()
 	targetRemoves := len(memberIDs) - (1 + len(exemptUsersTotal))
@@ -107,7 +109,7 @@ func (na NukeAccount) removeMembers() error {
 		}
 		wg.Add(1)
 		go func(id string) {
-			if na.Config.FeatureConfig.MemberRemovalConfig.BanMembers {
+			if na.Config.FeatureConfig.MemberRemoval.BanMembers {
 				err := na.Session.GuildBanCreate(na.Config.GuildID, id, 7)
 				if err != nil {
 					goodRemoves--
@@ -123,6 +125,27 @@ func (na NukeAccount) removeMembers() error {
 	}
 	wg.Wait()
 	logger.Infof("Removed %d/%d members\n", goodRemoves, targetRemoves)
+	return nil
+}
+func (na NukeAccount) roleSpam() error {
+	randGen := rand.New(rand.NewSource(time.Now().UnixNano()))
+	wg := sync.WaitGroup{}
+	roleSpamConfig := na.Config.FeatureConfig.RoleSpam
+	for i := 0; i < roleSpamConfig.RoleAmount; i++ {
+		wg.Add(1)
+		go func() {
+			name := roleSpamConfig.RoleName
+			if len(roleSpamConfig.RoleNames) > 0 {
+				name = roleSpamConfig.RoleNames[randGen.Intn(len(roleSpamConfig.RoleNames))]
+			}
+			na.Session.GuildRoleCreate(na.Config.GuildID, &discordgo.RoleParams{
+				Name:  name,
+				Color: &roleSpamConfig.RoleColor,
+			})
+			wg.Done()
+		}()
+	}
+	wg.Wait()
 	return nil
 }
 

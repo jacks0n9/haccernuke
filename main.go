@@ -28,7 +28,7 @@ func main() {
 	session, _ := discordgo.New(nukeAccount.Config.Token)
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged | discordgo.IntentGuildMembers
 	nukeAccount.Session = session
-	if !nukeAccount.Config.FeatureConfig.AutoNukeConfig.Enabled {
+	if !nukeAccount.Config.FeatureConfig.AutoNuke.Enabled {
 		fmt.Println("Initialized with auto nuke off. Proceed with nuke (press enter)?")
 		fmt.Scanln()
 	}

