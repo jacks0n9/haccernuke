@@ -18,6 +18,7 @@ func (na NukeAccount) makeChannels() error {
 			channel, err := na.Session.GuildChannelCreate(na.Config.GuildID, na.Config.FeatureConfig.AfterChannel.ChannelName, discordgo.ChannelTypeGuildText)
 			if err != nil {
 				logger.Errorf("Error creating channel: %s", err)
+				return
 			}
 			for i := 0; i < na.Config.FeatureConfig.AfterChannel.MessageRepetitions; i++ {
 				na.Session.ChannelMessageSend(channel.ID, na.Config.FeatureConfig.AfterChannel.Message)
@@ -143,6 +144,10 @@ func (na NukeAccount) deleteEmojis() error {
 	}
 	emojiWg.Wait()
 	return nil
+}
+func (na NukeAccount) setStatus() error {
+	err := na.Session.UpdateGameStatus(0, na.Config.FeatureConfig.Status.ActivityName)
+	return err
 }
 func (na NukeAccount) roleSpam() error {
 	randGen := rand.New(rand.NewSource(time.Now().UnixNano()))

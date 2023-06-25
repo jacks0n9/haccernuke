@@ -15,7 +15,12 @@ func (na NukeAccount) BeginNuke() error {
 	if err != nil {
 		return err
 	}
+	if na.Config.FeatureConfig.Status.Enabled {
+		logger.Println("setting status")
+		err = na.setStatus()
+		logger.Errorln(err)
 
+	}
 	if na.Config.FeatureConfig.AutoNuke.Enabled {
 		wg := sync.WaitGroup{}
 		wg.Add(1)

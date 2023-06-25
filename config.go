@@ -10,6 +10,7 @@ type FeatureConfig struct {
 	MemberRemoval  MemberRemovalConfig `toml:"member_removal"`
 	AutoNuke       AutoNukeConfig      `toml:"auto_nuke"`
 	RoleSpam       RoleSpamConfig      `toml:"role_spam"`
+	Status         StatusConfig        `toml:"status"`
 	DeleteEmojis   bool                `toml:"delete_emojis"`
 	DeleteRoles    bool                `toml:"delete_roles"`
 	DeleteChannels bool                `toml:"delete_channels"`
@@ -27,7 +28,10 @@ type AfterChannelConfig struct {
 	ChannelAmount      int    `toml:"channel_amount"`
 	ChannelName        string `toml:"channel_name"`
 }
-
+type StatusConfig struct {
+	Enabled      bool   `toml:"enabled"`
+	ActivityName string `toml:"activity_name"`
+}
 type AutoNukeConfig struct {
 	Enabled      bool     `toml:"enabled"`
 	TargetOnly   []string `toml:"target_only"`
