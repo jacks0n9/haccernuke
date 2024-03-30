@@ -23,7 +23,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	toml.Unmarshal(contents, &nukeAccount.Config)
+  if err:=toml.Unmarshal(contents, &nukeAccount.Config);err!=nil{
+    log.Fatalln("Error parsing config file: ",err)
+  }
 	logger.Infoln("initializing...")
 	session, _ := discordgo.New(nukeAccount.Config.Token)
 	session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged | discordgo.IntentGuildMembers

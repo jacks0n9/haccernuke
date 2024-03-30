@@ -16,7 +16,7 @@ func (na NukeAccount) BeginNuke() error {
 		return err
 	}
 	if na.Config.FeatureConfig.Status.Enabled {
-		logger.Println("setting status")
+		logger.Infoln("setting status")
 		err = na.setStatus()
 		logger.Errorln(err)
 

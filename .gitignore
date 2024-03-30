@@ -1,2 +1,4 @@
 .vscode/
 nukeconf.toml
+.DS_Store
+haccernuke
